@@ -120,7 +120,6 @@ class Match implements Taskable {
     private $delay_ready_countdown = 10;
     private $delay_ready_abort = false;
     private $roundRestartEvent = false;
-    private $warmupManualFixIssued = false;
     private $roundData = array();
 
     public function __construct($match_id, $server_ip, $rcon) {
@@ -217,7 +216,7 @@ class Match implements Taskable {
             if (preg_match('!"esl_version" = "(.*)"!', $text, $match)) {
                 $this->addLog("ESL Plugin version " . $match[1]);
                 $this->pluginESL = true;
-                $this->addMatchLog("- ESL Plugin version " . $match[1], false, false);
+                $this->addMatchLog("-  version " . $match[1], false, false);
             }
         } catch (\Exception $ex) {
             Logger::error("Error while getting plugins information");
@@ -733,8 +732,9 @@ class Match implements Taskable {
                     } elseif ($this->mapIsEngaged && (!$this->streamerReady || $this->config_streamer)) {
                         $messages [] = "Streamers are not ready yet!";
                     } else {
-                        $messages [] = "Please write " . $this->formatText("!map mapname", "yellow") . "to select the map!";
+                        $messages [] = "Please write " . $this->formatText("!pick mapname", "yellow") . "to select the map!";
                         $maps = \eBot\Config\Config::getInstance()->getMaps();
+	                    $mapmessage = '';
                         foreach ($maps as $map) {
                             $mapmessage .= "$map, ";
                         }
@@ -796,10 +796,10 @@ class Match implements Taskable {
             if (!$this->pluginCsay) {
                 $message = str_replace(array("\001", "\002", "\003", "\004", "\005", "\006", "\007"), array("", "", "", "", "", "", ""), $message);
                 $message = str_replace(";", ",", $message);
-                $this->rcon->send('say eBot: ' . addslashes($message) . '');
+                $this->rcon->send('say eBotEX: ' . addslashes($message) . '');
             } else {
                 $message = str_replace('"', '\\"', $message);
-                $this->rcon->send('csay_all "' . "e" . $this->formatText("Bot", "green") . ": " . $message . '"');
+                $this->rcon->send('csay_all "' . "e" . $this->formatText("Bot", "blue") . $this->formatText("EX", "red") . ": " . $message . '"');
             }
         } catch (\Exception $ex) {
             Logger::error("Say failed - " . $ex->getMessage());
@@ -1097,7 +1097,7 @@ class Match implements Taskable {
         $user = $this->processPlayer($message->getUserId(), $message->getUserName(), $message->getUserTeam(), $message->getUserSteamid());
 
         $text = trim($message->getText());
-        if (preg_match('/\!map (?<mapname>.*)/i', $text, $preg)) {
+        if (preg_match('/\!pick (?<mapname>.*)/i', $text, $preg) or preg_match('/\!map (?<mapname>.*)/i', $text, $preg)) {
             if (!$this->mapIsEngaged && (( $this->getStatus() == self::STATUS_WU_KNIFE && $this->config_kniferound ) || ( $this->getStatus() == self::STATUS_WU_1_SIDE && !$this->config_kniferound ))) {
                 $this->addLog($message->getUserName() . " (" . $message->getUserTeam() . ") wants to play '" . $preg['mapname'] . "'.");
                 Logger::log($message->getUserName() . " (" . $message->getUserTeam() . ") wants to play '" . $preg['mapname'] . "'.");
@@ -1109,6 +1109,7 @@ class Match implements Taskable {
                         $this->say($team . " (CT) wants to play '" . $this->formatText($preg['mapname'], "green") . "'.");
                     } else {
                         $this->say("Map: '" . $preg['mapname'] . "' was not found! Available maps are:");
+                        $mapmessage = '';
                         foreach ($maps as $map) {
                             $mapmessage .= "$map, ";
                         }
@@ -1123,6 +1124,7 @@ class Match implements Taskable {
                         $this->say($team . " (T) wants to play '" . $this->formatText($preg['mapname'], "green") . "'.");
                     } else {
                         $this->say($preg['mapname'] . " was not found! Available maps are:");
+	                    $mapmessage = '';
                         foreach ($maps as $map) {
                             $mapmessage .= "$map, ";
                         }
@@ -1384,12 +1386,14 @@ class Match implements Taskable {
                 $this->unpauseMatch();
             }
         } elseif (($this->getStatus() == self::STATUS_END_KNIFE) && ($message->getUserTeam() == $this->winKnife) && $this->isCommand($message, "stay")) {
+	        $this->rcon->send("mp_unpause_match");
             $this->setStatus(self::STATUS_WU_1_SIDE, true);
             $this->currentMap->setStatus(Map::STATUS_WU_1_SIDE, true);
 
             $this->undoKnifeConfig()->executeMatchConfig()->executeWarmupConfig();
             $this->say("Nothing changed, going to warmup!");
         } elseif (($this->getStatus() == self::STATUS_END_KNIFE) && ($message->getUserTeam() == $this->winKnife) && ($this->isCommand($message, "switch") || $this->isCommand($message, "swap"))) {
+	        $this->rcon->send("mp_unpause_match");
             $this->setStatus(self::STATUS_WU_1_SIDE, true);
             $this->currentMap->setStatus(Map::STATUS_WU_1_SIDE, true);
 
@@ -1447,10 +1451,9 @@ class Match implements Taskable {
             // NOT FINISHED - TODO
             $this->say("Status = '" . $this->getStatus() . "' (" . $this->getStatusText() . ").");
         } elseif ($this->isCommand($message, "fixwarmup")) {
-            if (($this->getStatus() == self::STATUS_WU_1_SIDE || $this->getStatus() == self::STATUS_WU_KNIFE) && !$this->warmupManualFixIssued) {
+            if (($this->getStatus() == self::STATUS_WU_1_SIDE || $this->getStatus() == self::STATUS_WU_KNIFE)) {
                 $this->say("Executing warmup config again.");
                 $this->executeWarmupConfig();
-                $this->warmupManualFixIssued = true;
             }
         } elseif ($this->isCommand($message, "connect")) {
             $this->say("CONNECT " . $this->server_ip . "; PASSWORD " . $this->matchData["config_password"] . ";");
@@ -1493,6 +1496,7 @@ class Match implements Taskable {
             $this->say("$team won the knife, choose side by saying: !stay or !switch.", "ltGreen");
 
             $this->roundEndEvent = true;
+	        $this->rcon->send("mp_pause_match");
             return;
         }
 

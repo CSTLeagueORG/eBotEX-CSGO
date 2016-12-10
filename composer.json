@@ -1,14 +1,18 @@
 {
-    "name": "ebot/ebot-csgo",
-    "description": "The eBot version for CS:GO.",
-    "keywords": ["ebot","csgo","counter-strike global offensive","bot"],
-    "homepage": "http://github.com/deStrO/eBot-CSGO",
-    "license": "Apache Commons 3.0",
+    "name": "ebotex/ebotex-csgo",
+    "description": "The modified eBot version for CS:GO.",
+    "keywords": ["ebotex","csgo","counter-strike global offensive","bot"],
+    "homepage": "http://github.com/CodersGit/eBotEX-CSGO",
+    "license": "",
     "authors": [
         {
             "name": "Julien Pardons",
             "email": "destro@esport-tools.net",
             "homepage": "http://www.esport-tools.net"
+        },
+        {
+            "name": "Sergey Zhirov",
+            "email": "sergey@webmcrex.com"
         }
     ],
     "require": {
