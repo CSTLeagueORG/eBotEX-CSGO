@@ -799,7 +799,7 @@ class Match implements Taskable {
                 $this->rcon->send('say eBotEX: ' . addslashes($message) . '');
             } else {
                 $message = str_replace('"', '\\"', $message);
-                $this->rcon->send('csay_all "' . "e" . $this->formatText("Bot", "blue") . $this->formatText("EX", "red") . ": " . $message . '"');
+                $this->rcon->send('csay_all "' . "e" . $this->formatText("Bot", "green") . ": " . "e" . $this->formatText("Bot", "blue") . $this->formatText("EX", "red") . ": " . $message . '"');
             }
         } catch (\Exception $ex) {
             Logger::error("Say failed - " . $ex->getMessage());
@@ -810,7 +810,7 @@ class Match implements Taskable {
         if ($color)
             $message = $this->formatText($message, $color);
 
-        $this->rcon->send("csay_to_player $playerId \"e" . $this->formatText("Bot", "green") . ": $message\"");
+        $this->rcon->send("csay_to_player $playerId \"e" . $this->formatText("Bot", "green") . ": " . "e" . $this->formatText("Bot", "blue") . $this->formatText("EX", "red") . ": $message\"");
         return $this;
     }
 
@@ -1244,6 +1244,7 @@ class Match implements Taskable {
                 }
 
                 if ($this->restart["ct"] && $this->restart["t"]) {
+	                $this->rcon->send("mp_unpause_match");
                     $this->ready["ct"] = true;
                     $this->ready["t"] = true;
 
