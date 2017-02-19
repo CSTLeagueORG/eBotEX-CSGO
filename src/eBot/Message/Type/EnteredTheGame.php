@@ -2,6 +2,7 @@
 
 /**
  * eBot - A bot for match management for CS:GO
+ *
  * @license     http://creativecommons.org/licenses/by/3.0/ Creative Commons 3.0
  * @author      Julien Pardons <julien.pardons@esport-tools.net>
  * @version     3.0
@@ -14,13 +15,13 @@ use eBot\Message\Type;
 
 class EnteredTheGame extends Type {
 
-    public $userId = "";
-    public $userName = "";
-    public $userSteamid = "";
+	public $userId = "";
+	public $userName = "";
+	public $userSteamid = "";
 
-    public function __construct() {
-        $this->setName("EnteredTheGame");
-    }
+	public function __construct () {
+		$this->setName("EnteredTheGame");
+	}
 
 }
 

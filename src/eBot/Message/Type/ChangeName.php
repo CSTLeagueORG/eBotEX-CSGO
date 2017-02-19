@@ -2,6 +2,7 @@
 
 /**
  * eBot - A bot for match management for CS:GO
+ *
  * @license     http://creativecommons.org/licenses/by/3.0/ Creative Commons 3.0
  * @author      Julien Pardons <julien.pardons@esport-tools.net>
  * @version     3.0
@@ -14,15 +15,15 @@ use eBot\Message\Type;
 
 class ChangeName extends Type {
 
-    public $userId = "";
-    public $userName = "";
-    public $userTeam = "";
-    public $userSteamid = "";
-    public $newName = "";
+	public $userId = "";
+	public $userName = "";
+	public $userTeam = "";
+	public $userSteamid = "";
+	public $newName = "";
 
-    public function __construct() {
-        $this->setName("ChangeName");
-    }
+	public function __construct () {
+		$this->setName("ChangeName");
+	}
 
 }
 

@@ -1,6 +1,7 @@
 <?php
 /**
  * eBot - A bot for match management for CS:GO
+ *
  * @license     http://creativecommons.org/licenses/by/3.0/ Creative Commons 3.0
  * @author      Julien Pardons <julien.pardons@esport-tools.net>
  * @version     3.0
@@ -10,9 +11,9 @@
 namespace eBot\Events\Event;
 
 use eBot\Events\Event;
- 
+
 class Say extends Event {
-	
+
 	protected $match;
 	protected $user_id;
 	protected $user_name;
@@ -20,7 +21,7 @@ class Say extends Event {
 	protected $user_steamid;
 	protected $type;
 	protected $text;
-	
+
 }
 
 ?>

@@ -2,6 +2,7 @@
 
 /**
  * eBot - A bot for match management for CS:GO
+ *
  * @license     http://creativecommons.org/licenses/by/3.0/ Creative Commons 3.0
  * @author      Julien Pardons <julien.pardons@esport-tools.net>
  * @version     3.0
@@ -14,14 +15,14 @@ use eBot\Message\Type;
 
 class Connected extends Type {
 
-    public $userId = "";
-    public $userName = "";
-    public $userSteamid = "";
-    public $address = "";
+	public $userId = "";
+	public $userName = "";
+	public $userSteamid = "";
+	public $address = "";
 
-    public function __construct() {
-        $this->setName("Connected");
-    }
+	public function __construct () {
+		$this->setName("Connected");
+	}
 
 }
 

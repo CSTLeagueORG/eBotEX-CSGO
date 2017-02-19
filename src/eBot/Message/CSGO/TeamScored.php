@@ -2,6 +2,7 @@
 
 /**
  * eBot - A bot for match management for CS:GO
+ *
  * @license     http://creativecommons.org/licenses/by/3.0/ Creative Commons 3.0
  * @author      Julien Pardons <julien.pardons@esport-tools.net>
  * @version     3.0
@@ -21,18 +22,18 @@ use eBot\Message\Type\TeamScored as Object;
 
 class TeamScored extends Message {
 
-    public function __construct() {
-        parent::__construct('/^Team "(?P<team>CT|TERRORIST)" scored "(?P<score>\d+)" with "(?P<players>\d+)" players/');
-    }
+	public function __construct () {
+		parent::__construct('/^Team "(?P<team>CT|TERRORIST)" scored "(?P<score>\d+)" with "(?P<players>\d+)" players/');
+	}
 
-    public function process() {
-        $o = new Object();
-        $o->setTeam($this->datas["team"] == "CT" ? "ct": "t");
-        $o->setScore($this->datas['score']);
-        $o->setPlayers($this->datas['players']);       
+	public function process () {
+		$o = new Object();
+		$o->setTeam($this->datas["team"] == "CT"? "ct" : "t");
+		$o->setScore($this->datas['score']);
+		$o->setPlayers($this->datas['players']);
 
-        return $o;
-    }
+		return $o;
+	}
 
 }
 

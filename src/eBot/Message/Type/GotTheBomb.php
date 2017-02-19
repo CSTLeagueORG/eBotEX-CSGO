@@ -2,6 +2,7 @@
 
 /**
  * eBot - A bot for match management for CS:GO
+ *
  * @license     http://creativecommons.org/licenses/by/3.0/ Creative Commons 3.0
  * @author      Julien Pardons <julien.pardons@esport-tools.net>
  * @version     3.0
@@ -14,9 +15,9 @@ use eBot\Message\Type;
 
 class GotTheBomb extends Type {
 
-    public function __construct() {
-        $this->setName("GotTheBomb");
-    }
+	public function __construct () {
+		$this->setName("GotTheBomb");
+	}
 
 }
 
