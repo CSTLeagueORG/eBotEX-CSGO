@@ -103,6 +103,8 @@ class Match implements Taskable {
 	private $messageManager;
 	private $teamAName;
 	private $teamBName;
+	private $teamAShortName;
+	private $teamBShortName;
 	private $teamAFlag;
 	private $teamBFlag;
 	private $rconPassword;
@@ -146,10 +148,12 @@ class Match implements Taskable {
 		// SETTING TEAMNAME AND FLAG
 		$teama_details = $this->getTeamDetails($this->matchData["team_a"], "a");
 		$this->teamAName = $teama_details['name'];
+		$this->teamAShortName = $teama_details['shorthandle'];
 		$this->teamAFlag = $teama_details['flag'];
 
 		$teamb_details = $this->getTeamDetails($this->matchData["team_b"], "b");
 		$this->teamBName = $teamb_details['name'];
+		$this->teamBShortName = $teamb_details['shorthandle'];
 		$this->teamBFlag = $teamb_details['flag'];
 
 		$this->season_id = $this->matchData["season_id"];
@@ -549,9 +553,9 @@ class Match implements Taskable {
 			return $ds;
 		} else {
 			if($t == "a") {
-				return array("name" => $this->matchData['team_a_name'], "flag" => $this->matchData['team_a_flag']);
+				return array("shorthandle" => $this->matchData['team_a_name'], "name" => $this->matchData['team_a_name'], "flag" => $this->matchData['team_a_flag']);
 			} elseif($t == "b") {
-				return array("name" => $this->matchData['team_b_name'], "flag" => $this->matchData['team_b_flag']);
+				return array("shorthandle" => $this->matchData['team_b_name'], "name" => $this->matchData['team_b_name'], "flag" => $this->matchData['team_b_flag']);
 			}
 		}
 	}
@@ -560,6 +564,7 @@ class Match implements Taskable {
 		if($name == self::SET_LIVE) {
 			$this->addLog("Setting live.");
 			$this->enable = true;
+			$this->rcon->send("mp_unpause_match");
 		} elseif($name == self::TASK_ENGAGE_MAP) {
 			$tvTimeRemaining = $this->rcon->send("tv_time_remaining");
 			if(preg_match('/(?<time>\d+\.\d+) seconds/', $tvTimeRemaining, $preg)) {
@@ -1727,7 +1732,7 @@ class Match implements Taskable {
 			$teamBScoreColor = ($this->currentMap->getScore2() >= $this->currentMap->getScore1())? ($this->currentMap->getScore1() == $this->currentMap->getScore2())? 'default' : "green" : "red";
 			$teamAColor = ($this->side['team_a'] == "ct")? "blue" : "yellow";
 			$teamBColor = ($this->side['team_b'] == "ct")? "blue" : "yellow";
-			$this->say($this->formatText($this->teamAName, $teamAColor) . " " . $this->formatText($this->currentMap->getScore1(), $teamAScoreColor) . " - " . $this->formatText($this->currentMap->getScore2(), $teamBScoreColor) . " " . $this->formatText($this->teamBName, $teamBColor) . ".");
+			$this->say($this->formatText($this->teamAShortName, $teamAColor) . " " . $this->formatText($this->currentMap->getScore1(), $teamAScoreColor) . " - " . $this->formatText($this->currentMap->getScore2(), $teamBScoreColor) . " " . $this->formatText($this->teamBShortName, $teamBColor) . ".");
 
 			$this->addLog($this->teamAName . " (" . $this->currentMap->getScore1() . ") - (" . $this->currentMap->getScore2() . ") " . $this->teamBName . ".");
 			$this->addMatchLog("One round was marked - " . $this->teamAName . " (" . $this->currentMap->getScore1() . ") - (" . $this->currentMap->getScore2() . ") " . $this->teamBName . ".");
