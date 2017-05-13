@@ -2,7 +2,6 @@
 
 /**
  * eBot - A bot for match management for CS:GO
- *
  * @license     http://creativecommons.org/licenses/by/3.0/ Creative Commons 3.0
  * @author      Julien Pardons <julien.pardons@esport-tools.net>
  * @version     3.0
@@ -44,6 +43,7 @@ class Config extends Singleton {
 	private $remember_recordmsg = false;
 	private $external_log_ip = "";
 	private $node_startup_method = "node";
+	private $useDelayEndRecord = false;
 
 	public function __construct () {
 		Logger::debug("Loading " . APP_ROOT . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "config.ini");
@@ -87,8 +87,29 @@ class Config extends Singleton {
 				$this->remember_recordmsg = (bool) $config['REMIND_RECORD'];
 			}
 
+			if (isset($config['USE_DELAY_END_RECORD']) && is_bool((bool)$config['USE_DELAY_END_RECORD']))
+				$this->useDelayEndRecord = (bool)$config['USE_DELAY_END_RECORD'];
+
 			Logger::debug("Configuration loaded");
 		}
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isUseDelayEndRecord()
+	{
+		return $this->useDelayEndRecord;
+	}
+
+	/**
+	 * @param bool $useDelayEndRecord
+	 * @return Config
+	 */
+	public function setUseDelayEndRecord($useDelayEndRecord)
+	{
+		$this->useDelayEndRecord = $useDelayEndRecord;
+		return $this;
 	}
 
 	public function scanAdvertising () {
