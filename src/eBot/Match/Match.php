@@ -2357,12 +2357,14 @@ class Match implements Taskable {
 		$this->addMatchLog(htmlentities("Player: '" . $message->userName . "' disconnected."));
 		$player = $this->findPlayer($message->userId, $message->userSteamid);
 		if($this->delay_ready_inprogress) {
-			$this->abortReady();
 			$this->say("Player '" . $this->formatText($message->userName, 'red') . "' disconnected. Aborting countdown.");
+			$this->abortReady();
 		}
-		if($this->isMatchRound() and !$this->isPaused and ($this->status == self::STATUS_FIRST_SIDE or $this->status == self::STATUS_SECOND_SIDE or $this->status == self::STATUS_OT_FIRST_SIDE or $this->status == self::STATUS_OT_SECOND_SIDE)) {
-			$this->pauseMatch();
+		if(($message->userTeam == 'TERRORIST' || $message->userTeam == 'CT') && $this->isMatchRound() and !$this->isPaused and ($this->status == self::STATUS_FIRST_SIDE or $this->status == self::STATUS_SECOND_SIDE or $this->status == self::STATUS_OT_FIRST_SIDE or $this->status == self::STATUS_OT_SECOND_SIDE)) {
 			$this->say("Player '" . $this->formatText($message->userName, 'red') . "' disconnected. Match paused.");
+			$this->pause['ct'] = true;
+			$this->pause['t'] = true;
+			$this->pauseMatch();
 		}
 		if($player != null) {
 			$player->setOnline(false);
