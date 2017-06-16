@@ -19,7 +19,7 @@ The following extensions are required:
 See installtion guide for a step-by-step install instruction.
 
 ## License
-The code is under Creative Commons license. You can find all details here: 
+The code is under Creative Commons license. You can find all details here: http://creativecommons.org/licenses/by/3.0/
 
 You can copy, distribute, modify the source code, but you have to keep the license terms.
 
