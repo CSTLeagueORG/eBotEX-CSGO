@@ -21,12 +21,12 @@ require_once 'steam-condenser.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'websocket' . DIRECTORY_SEPARATOR . 'websocket.client.php';
 
 echo "
-      ____        _
-     |  _ \      | |
-  ___| |_) | ___ | |_
- / _ \  _ < / _ \| __|
-|  __/ |_) | (_) | |_
- \___|____/ \___/ \__|
+      ____        _    _____ __    __
+     |  _ \      | |  |  ___|\ \  / /
+  ___| |_) | ___ | |_ | |__   \ \/ /
+ / _ \  _ < / _ \| __||  __|   |  |
+|  __/ |_) | (_) | |_ | |___  / /\ \
+ \___|____/ \___/ \__||_____|/_/  \_\
  " . PHP_EOL;
 
 echo "PHP Compatibility Test" . PHP_EOL;
