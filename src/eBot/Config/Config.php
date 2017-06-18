@@ -14,7 +14,7 @@ use \eTools\Utils\Singleton;
 use \eTools\Utils\Logger;
 
 /**
- * @method Config getInstance() Description
+ * @method static Config getInstance() Description
  */
 class Config extends Singleton {
 
@@ -25,6 +25,9 @@ class Config extends Singleton {
 	private $mysql_base;
 	private $bot_ip;
 	private $bot_port;
+	private $sslEnabled;
+	private $sslCertPath;
+	private $sslKeyPath;
 	private $messages = array();
 	private $record_name = "ebot";
 	private $delay_busy_server = 90;
@@ -58,6 +61,9 @@ class Config extends Singleton {
 
 			$this->bot_ip = $config["BOT_IP"];
 			$this->bot_port = $config["BOT_PORT"];
+			$this->sslEnabled = $config["SSL_ENABLED"];
+			$this->sslCertPath = $config["SSL_CERTIFICATE_PATH"];
+			$this->sslKeyPath = $config["SSL_KEY_PATH"];
 
 			$this->delay_busy_server = $config["DELAY_BUSY_SERVER"];
 
@@ -210,6 +216,39 @@ class Config extends Singleton {
 
 	public function setBot_port ($bot_port) {
 		$this->bot_port = $bot_port;
+	}
+
+	public function isSSLEnabled()
+	{
+		return $this->sslEnabled;
+	}
+
+	public function setSSLEnabled($sslEnabled)
+	{
+		$this->sslEnabled = $sslEnabled;
+		return $this;
+	}
+
+	public function getSSLCertificatePath()
+	{
+		return $this->sslCertPath;
+	}
+
+	public function setSSLCertificatePath($sslCertificatePath)
+	{
+		$this->sslCertPath = $sslCertificatePath;
+		return $this;
+	}
+
+	public function getSSLKeyPath()
+	{
+		return $this->sslKeyPath;
+	}
+
+	public function setSSLKeyPath($sslKeyPath)
+	{
+		$this->sslKeyPath = $sslKeyPath;
+		return $this;
 	}
 
 	public function getMessages () {
